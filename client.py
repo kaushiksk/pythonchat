@@ -20,10 +20,10 @@ def chatclient():
     print "Connected successfully"
     nick = raw_input("Choose Nick:")
     s.send(nick)
+    
+    print "["+nick+"]: ",;sys.stdout.flush()
 
-    print "[Me]: ",;sys.stdout.flush()
 
-    #TODO ask for nick
 
     while 1:
 
@@ -37,17 +37,17 @@ def chatclient():
 
                 data = s.recv(buffer_size)
                 if not data:
-                    print "Disocnnected"
+                    print "\r"+"Disconnected"
                     sys.exit()
 
                 print data
-                print "[Me]:",;sys.stdout.flush()
+                print "["+nick+"]: ",;sys.stdout.flush()
 
             else:
 
                 text = raw_input()
                 s.send(text)
-                print "\b[Me]:",;sys.stdout.flush()
+                print "\b["+nick+"]: ",;sys.stdout.flush()
 
 
 if __name__=="__main__":
