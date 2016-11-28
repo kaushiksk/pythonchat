@@ -1,2 +1,2 @@
 # pythonchat
-Terminal based chat client using python sockets
+Terminal operated chat client using Python Sockets
