@@ -18,7 +18,7 @@ def chatserver():
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((host,port))
     server.listen(MAX_USERS)
-    server_up = time.asctime()
+    server_up = time.strftime("%d/%h/%Y %H:%M:%S")
     sock_list.append(server)
     print "Chat server started on port " + str(port)
     while 1:
@@ -32,7 +32,7 @@ def chatserver():
                 client, addr = sock.accept()
                 sock_list.append(client)
 
-                print time.asctime() + " New Client Connected at (%s,%s)"%addr
+                print "["+time.strftime("%d/%h/%Y %H:%M:%S") + "] New Client Connected at (%s,%s)"%addr
                 sendtoall(server,client,"\r"+"New Client Connected: (%s,%s)"%addr)
                 nick = getnick(client)
                 sendtoall(server,client,"\r"+"Client (%s,%s) chose nick "%addr + nick)
@@ -83,14 +83,14 @@ def print_online_clients(server,client):
     online = [users[i]["nick"]+"@"+str(i.getpeername())+" In: "+users[i]["in"] for i in sock_list if i!=server and i!=client]
     if not online:
         online = ["None"]
-    client.send("\r"+"User currently online:\n"+"\n".join(online))
+    client.send("\r"+"Users currently online:\n"+"\n".join(online))
 
 
 def getnick(client):
     nick = client.recv(1024)
     #TODO check for duplicate nicks
     users[client] = {"nick":nick,
-                     "in":time.asctime()}
+                     "in":time.strftime("%d/%h/%Y %H:%M:%S")}
     print users[client]["in"] + ": New Client (%s,%s) chose nick "%client.getpeername() + nick
 
     return nick
@@ -98,7 +98,7 @@ def getnick(client):
 
 def removeclient(sock):
     sock_list.remove(sock)
-    print time.asctime() + ": "+  users[sock]["nick"] + " has disconnected"
+    print time.strftime("%d/%h/%Y %H:%M:%S") + ": "+  users[sock]["nick"] + " has disconnected"
     sendtoall(server,sock,"\r" + "Client " + users[sock]["nick"] + "(%s,%s) is now offline"%sock.getpeername())
 
 
